@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.avaje</groupId>
     <artifactId>tests</artifactId>
-    <version>2.9-RC2</version>
+    <version>2.9-RC3</version>
   </parent>
 
   <artifactId>test-sigma</artifactId>
@@ -28,7 +28,7 @@
     <dependency>
       <groupId>io.avaje</groupId>
       <artifactId>avaje-sigma</artifactId>
-      <version>0.4</version>
+      <version>0.3</version>
     </dependency>
 
     <dependency>

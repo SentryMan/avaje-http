@@ -133,7 +133,7 @@ class ControllerMethodWriter {
 
   private boolean producesJson() {
     return !"byte[]".equals(method.returnType().toString())
-        && (method.produces() == null || method.produces().toLowerCase().contains("json"));
+      && (method.produces() == null || method.produces().toLowerCase().contains("json"));
   }
 
   private boolean producesText() {
@@ -256,7 +256,6 @@ class ControllerMethodWriter {
       } else {
         writer.append(indent);
         writeContextReturn(responseMode, "result");
-        writer.eol();
       }
       if (includeNoContent) {
         writer.append("    }").eol();
@@ -265,16 +264,14 @@ class ControllerMethodWriter {
   }
 
   private void writeContextReturn(ResponseMode responseMode, String resultVariable) {
-
     final UType type = UType.parse(method.returnType());
     if ("java.util.concurrent.CompletableFuture".equals(type.mainType())) {
       logError(method.element(), "CompletableFuture is not a supported return type.");
-      writer.append("; //ERROR");
+      writer.append("; //ERROR").eol();
       return;
     }
 
     final var produces = method.produces();
-
     switch (responseMode) {
       case Void -> {}
       case Json -> writeJsonReturn(produces);
@@ -282,20 +279,20 @@ class ControllerMethodWriter {
       case Templating -> writer.append("ctx.html(%s);", resultVariable);
       default -> writer.append("ctx.contentType(\"%s\").write(%s);", produces, resultVariable);
     }
+    writer.eol();
   }
 
-  private Append writeJsonReturn(String produces) {
-
+  private void writeJsonReturn(String produces) {
     if (useJsonB) {
       var uType = UType.parse(method.returnType());
       if (produces == null) {
         produces = MediaType.APPLICATION_JSON.getValue();
       }
-      return writer.append(
-          "%sJsonType.toJson(result, ctx.contentType(\"%s\").outputStream());",
-          uType.shortName(), produces);
+      writer.append(
+        "%sJsonType.toJson(result, ctx.contentType(\"%s\").outputStream());",
+        uType.shortName(), produces);
     } else {
-      return writer.append("ctx.json(result);");
+      writer.append("ctx.json(result);");
     }
   }
 
