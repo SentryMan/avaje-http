@@ -37,6 +37,7 @@ class DHttpClientRequestTest {
 
   @Disabled
   @Test
+  @Disabled
   void assertQuery() {
     final var client = HttpClient.builder().baseUrl("https://ap7i.github.com").build();
 
